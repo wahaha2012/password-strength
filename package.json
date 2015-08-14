@@ -1,0 +1,36 @@
+{
+  "name": "password-strength",
+  "version": "0.0.1",
+  "description": "password strength checker",
+  "main": "bundle.js",
+  "dependencies": {
+    "cli-color": "~1.0.0",
+    "gulp": "~3.9.0",
+    "gulp-cssmin": "~0.1.7",
+    "gulp-less": "~3.0.3",
+    "gulp-rename": "~1.2.2",
+    "gulp-uglify": "~1.2.0",
+    "mkdirp": "~0.5.1",
+    "path": "~0.11.14",
+    "promise-deferred": "~2.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/wahaha2012/password-strength.git"
+  },
+  "keywords": [
+    "password",
+    "strength",
+    "checker"
+  ],
+  "author": "wxwdesign@gmail.com",
+  "license": "GPL",
+  "bugs": {
+    "url": "https://github.com/wahaha2012/password-strength/issues"
+  },
+  "homepage": "https://github.com/wahaha2012/password-strength"
+}

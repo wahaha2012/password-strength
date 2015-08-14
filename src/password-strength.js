@@ -245,7 +245,7 @@ function(){
              * 4: strong
              * 5: stronger
              */
-            var strength = 1,
+            var strength = Math.ceil(password.length/minLength),
                 numberPattern = /\d+/,
                 stringLowPattern = /[a-z]+/,
                 stringUpPattern = /[A-Z]+/,
@@ -268,6 +268,10 @@ function(){
                 if(otherStrPattern.test(password)){
                     strength += 1;
                 }
+            }
+
+            if(strength>5){
+                strength = 5;
             }
 
             return {

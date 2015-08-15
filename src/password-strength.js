@@ -141,14 +141,14 @@ function(){
                 background: this.options.background[strength.text],
                 display: val.length?'block':'none',
                 width: notifierWidth-2 + 'px',
-                left: pos.left + size.width - notifierWidth + 'px',
+                left: pos.left + size.width - notifierWidth + 'px'
             });
 
             this.notifier.innerHTML = this.options.strengthTexts[strength.strength];
 
             $.css(this.notifierTag, {
                 display: val.length?'block':'none',
-                left: pos.left + size.width - notifierWidth - this._getStrLength(this.options.tagText)+ 'px',
+                left: pos.left + size.width - notifierWidth - this._getStrLength(this.options.tagText)+ 'px'
             });
         },
 
@@ -205,7 +205,7 @@ function(){
                 result = this._traverseInputs(list);
             }
 
-            return result
+            return result;
         },
 
         _traverseInputs: function(inputs){
@@ -215,7 +215,7 @@ function(){
                 return result;
             }else if(!inputs.length){
                 if(!result){
-                    return
+                    return;
                 }
                 var el = inputs,
                     val = el.value,
@@ -243,7 +243,7 @@ function(){
 
             return result
         },
-        
+
         checkStrength: function(password, minLength){
             if(typeof password !== "number" && typeof password !== "string"){
                 password = '';

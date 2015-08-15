@@ -67,7 +67,8 @@ var $ = {
                 return;
             }
 
-            var styles = element.getAttribute('style') || '',
+            // var styles = element.getAttribute('style') || '',
+            var styles = element.style.cssText || '',
                 styleArray = styles.split(';'),
                 styleResult = [];
 
@@ -86,7 +87,8 @@ var $ = {
                 styleResult.push(key+':'+cssData[key]);
             }
 
-            element.setAttribute('style', styleResult.join(";"));
+            // element.setAttribute('style', styleResult.join(";"));
+            element.style.cssText = styleResult.join(";");
         },
 
         on: function(element, eventName, handler){

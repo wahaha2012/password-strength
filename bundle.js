@@ -4,4 +4,464 @@
  * Licensed under the GPL License.
  * https://github.com/wahaha2012/password-strength
  */
-!function(t,e){e="function"==typeof e?e:function(){},"function"==typeof define?define.amd?define([],e):define.cmd&&define(function(t,n,i){i.exports=e()}):"object"==typeof exports?module.exports=e():"object"==typeof DP&&"function"==typeof DP.define?DP.define([],e):t.PasswordStrength=t.PasswordStrength||e()}(this,function(){function t(t){this.options=e.extend({},o),this.options=e.extend(this.options,t||{}),this._init()}var e={extend:function(t,e){t=t||{},e=e||{};for(var n in e)t[n]=e[n];return t},removeClass:function(t,e){if(t&&e){for(var n,i=t.getAttribute("class"),o=i.match(/\b[\w\-\_]+\b/g),s=[],h=0,r=o.length;r>h;h++)n=o[h],n!==e&&s.push(n);t.setAttribute("class",s.join(" "))}},addClass:function(t,e){if(t&&e){for(var n,i,o=t.getAttribute("class"),s=o.match(/\b[\w\-\_]+\b/g),h=0,r=s.length;r>h;h++)i=s[h],i===e&&(n=!0);n||s.push(e),t.setAttribute("class",s.join(" "))}},removeElement:function(t){t&&t.parentNode.removeChild(t)},css:function(t,e){if(t&&"object"==typeof e){for(var n,i=t.getAttribute("style")||"",o=i.split(";"),s=[],h=0,r=o.length;r>h;h++)n=o[h].split(":"),e[n[0]]&&(n[1]=e[n[0]],delete e[n[0]]),s.push(n.join(":"));for(var g in e)s.push(g+":"+e[g]);t.setAttribute("style",s.join(";"))}},on:function(t,e,n){t&&e&&n&&(t.addEventListener?t.addEventListener(e,n,!1):t.attachEvent?t.attachEvent("on"+e,n):t["on"+e]=n)},off:function(t,e,n){t.removeEventListener?t.removeEventListener(e,n,!1):t.detachEvent?t.detachEvent("on"+e,n):t["on"+e]=null}},n={getCharLength:function(t){for(var e=0,n=0,i=t.length;i>n;n++)e+=t.charCodeAt(n)>255?2:1;return e},getMaxLengthString:function(t,e,n){for(var i="",o=0,s=t.length;s>o;o++)if(i+=t.charAt(o),getCharLength(i)>e)return t.substr(0,o)+n;return t}},i=document.body,o={background:{weaker:"#f22a26",weak:"#ff880a",normal:"#b2a30a",strong:"#99b20a",stronger:"#58a80a"},checkLength:6,strengthTexts:["空","差","弱","中","好","强"],tagText:"密码强度",autoFindInputs:!0,zIndex:1e4};return t.prototype={constructor:t,_init:function(){if(this._createStrengthNotifier(),this._inputsList=[],this.options.autoFindInputs){var t=this._getPwDoms();this._inputsList.push(t),this._bindEvents(t)}},_getPwDoms:function(){var t;if(document.querySelectorAll)t=document.querySelectorAll("input[type=password]");else{var e=document.getElementsByTagName("input");t=[];for(var n=0,i=e.length;i>n;n++)"password"==e[n].getAttribute("type")&&t.push(e[n])}return t},_bindEvents:function(t){var n=this;if(!(t.length<1))for(var i,o=0,s=t.length;s>o;o++)i=t[o],function(t){e.on(t,"keyup",function(){n.updateStrength(t)}),e.on(t,"focus",function(){n.showStrength(t)}),e.on(t,"blur",function(){n.hideStrength()})}(i)},_getStrLength:function(t){return 6*(n.getCharLength(t)+3)},_createStrengthNotifier:function(){this.notifier=document.createElement("div"),this.notifierTag=document.createElement("div"),e.css(this.notifier,{position:"absolute",left:0,top:0,width:0,height:0,"font-size":"14px","text-align":"center",color:"#ffffff","z-index":this.options.zIndex,display:"none"}),e.css(this.notifierTag,{position:"absolute",left:0,top:0,width:this._getStrLength(this.options.tagText)+"px",height:0,"font-size":"12px","text-align":"center",color:"#666666",background:"#e0e0e0","z-index":this.options.zIndex+2,opacity:.7,display:"none"}),this.notifierTag.innerHTML=this.options.tagText,i.appendChild(this.notifier),i.appendChild(this.notifierTag)},addInputs:function(t){t&&(t.length||(t=[t]),this._inputsList.push(t),this._bindEvents(t))},updateStrength:function(t){var n=t.value,i={width:t.offsetWidth,height:t.offsetHeight},o=t.getBoundingClientRect(),s=this.checkStrength(n,this.options.checkLength),h=this._getStrLength(this.options.strengthTexts[s.strength]);e.css(this.notifier,{background:this.options.background[s.text],display:n.length?"block":"none",width:h-2+"px",left:o.left+i.width-h+"px"}),this.notifier.innerHTML=this.options.strengthTexts[s.strength],e.css(this.notifierTag,{display:n.length?"block":"none",left:o.left+i.width-h-this._getStrLength(this.options.tagText)+"px"})},showStrength:function(t){var n=t.value,i={width:t.offsetWidth,height:t.offsetHeight},o=t.getBoundingClientRect(),s=this.checkStrength(n),h=this._getStrLength(this.options.strengthTexts[s.strength]);e.css(this.notifier,{left:o.left+i.width-h+"px",top:o.top+2+"px",width:h-2+"px",height:i.height-4+"px","line-height":i.height-4+"px",background:this.options.background[s.text],display:n.length?"block":"none"}),this.notifier.innerHTML=this.options.strengthTexts[s.strength],e.css(this.notifierTag,{left:o.left+i.width-h-this._getStrLength(this.options.tagText)+"px",top:o.top+2+"px",height:i.height-4+"px","line-height":i.height-4+"px",display:n.length?"block":"none"})},hideStrength:function(){e.css(this.notifier,{display:"none"}),e.css(this.notifierTag,{display:"none"})},verify:function(t){var e=!0,n=t||this._inputsList,i=this;if(n.length)for(var o=0,s=n.length;s>o&&e;o++)e=i._traverseInputs(n[o]);else e=this._traverseInputs(n);return e},_traverseInputs:function(t){var e=this,n=!0;if(!t)return n;if(t.length)for(var i=0,o=t.length;o>i&&n;i++){var s=t[i],h=s.value,r=e.checkStrength(h,e.options.checkLength);r.strength<3&&(e.showStrength(s),n=!1)}else{if(!n)return;var s=t,h=s.value,r=e.checkStrength(h,e.options.checkLength);r.strength<3&&(e.showStrength(s),n=!1)}return n},checkStrength:function(t,e){t="number"!=typeof t&&"string"!=typeof t?"":String(t),e=e||6;var n=1,i=/\d+/,o=/[a-z]+/,s=/[A-Z]+/,h=/\W+/,r="weaker,weak,normal,strong,stronger";return t.length>=e&&(i.test(t)&&(n+=1),o.test(t)&&(n+=1),s.test(t)&&(n+=1),h.test(t)&&(n+=1),t.length>2*e&&(n+=Math.floor(t.length/e)-2),n>5&&(n=5)),{strength:n,text:r.split(",")[n-1]}}},t});
+(function(root, factory) {
+    factory = typeof factory === 'function' ? factory : function() {}
+    if (typeof define === 'function') {
+        if (define.amd) {
+            define([], factory);
+        } else if (define.cmd) {
+            define(function(require, exports, module) {
+                module.exports = factory();
+            });
+        }
+    } else if (typeof exports === 'object') {
+        module.exports = factory();
+    } else if (typeof DP === 'object' && typeof DP.define === 'function') {
+        DP.define([], factory);
+    } else {
+        root.PasswordStrength = root.PasswordStrength || factory();
+    }
+}(this, function(){
+    var $ = {
+        extend: function(to, from){
+            to = to || {};
+            from = from || {};
+
+            for(var key in from){
+                to[key] = from[key];
+            }
+
+            return to;
+        },
+
+        removeClass: function(element, className){
+            if(!element || !className){
+                return;
+            }
+
+            var classNameStr = element.getAttribute('class'),
+                classNames = classNameStr.match(/\b[\w\-\_]+\b/g),
+                classResult = [];
+
+            for(var i=0,item,L=classNames.length; i<L; i++){
+                item = classNames[i];
+
+                if(item!==className){
+                    classResult.push(item);
+                }
+            }
+
+            element.setAttribute('class', classResult.join(" "));
+        },
+
+        addClass: function(element, className){
+            if(!element || !className){
+                return;
+            }
+
+            var classNameStr = element.getAttribute('class'),
+                classNames = classNameStr.match(/\b[\w\-\_]+\b/g),
+                isExist;
+
+            for(var i=0,item,L=classNames.length; i<L; i++){
+                item = classNames[i];
+
+                if(item===className){
+                    isExist = true;
+                }
+            }
+
+            if(!isExist){
+                classNames.push(className);
+            }
+
+            element.setAttribute('class', classNames.join(" "));
+        },
+
+        removeElement: function(element){
+            if(!element){
+                return;
+            }
+
+            element.parentNode.removeChild(element);
+        },
+
+        css: function(element, cssData){
+            if(!element || typeof cssData!=='object'){
+                return;
+            }
+
+            // var styles = element.getAttribute('style') || '',
+            var styles = element.style.cssText || '',
+                styleArray = styles.split(';'),
+                styleResult = [];
+
+            for(var i=0,itemArr,L=styleArray.length; i<L; i++){
+                itemArr = styleArray[i].split(":");
+
+                if(cssData[itemArr[0]]){
+                    itemArr[1] = cssData[itemArr[0]];
+                    delete cssData[itemArr[0]];
+                }
+
+                styleResult.push(itemArr.join(":"));
+            }
+
+            for(var key in cssData){
+                styleResult.push(key+':'+cssData[key]);
+            }
+
+            // element.setAttribute('style', styleResult.join(";"));
+            element.style.cssText = styleResult.join(";");
+        },
+
+        on: function(element, eventName, handler){
+            if(!element || !eventName || !handler){
+                return;
+            }
+
+            if(element.addEventListener){
+                element.addEventListener(eventName, handler, false);
+            }else if (element.attachEvent) {
+                element.attachEvent("on" + eventName, handler);
+            }else {
+                element['on' + eventName] = handler;
+            }
+        },
+
+        off: function(element, eventName, handler){
+            if(element.removeEventListener){
+                element.removeEventListener(eventName, handler, false);
+            }else if(element.detachEvent) {
+                element.detachEvent('on'+eventName, handler);
+            }else{
+                element['on' + eventName] = null;
+            }
+        }
+    };
+    var utils = {
+        getCharLength: function (str) {
+            var charLen = 0;
+            for (var i = 0, len = str.length; i < len; i++) {
+                if (str.charCodeAt(i) > 255) {
+                    charLen += 2;
+                } else {
+                    charLen += 1;
+                }
+            }
+            return charLen;
+        },
+
+        getMaxLengthString: function(str, maxLength, subfix) {
+            var currentStr = "";
+            for (var i = 0, len = str.length; i < len; i++) {
+                currentStr += str.charAt(i);
+                if (getCharLength(currentStr) > maxLength) {
+                    return str.substr(0, i) + subfix;
+                }
+            }
+            return str;
+        }
+    };
+    
+    var BODY = document.body,
+        defaultOptions = {
+            background: {
+                'weaker': '#f22a26',
+                'weak': '#ff880a',
+                'normal': '#b2a30a',
+                'strong': '#99b20a',
+                'stronger': '#58a80a'
+            },
+            checkLength: 6,
+            strengthTexts:['空','差','弱','中','好','强'],
+            tagText: '密码强度',
+            autoFindInputs: true,
+            zIndex: 10000
+        };
+
+    function Password(options){
+        this.options = $.extend({}, defaultOptions);
+        this.options = $.extend(this.options, options||{});
+
+        this._init();
+    }
+
+    Password.prototype = {
+        constructor: Password,
+
+        _init: function(){
+            this._createStrengthNotifier();
+            this._inputsList = [];
+
+            if(this.options.autoFindInputs){
+                var inputs = this._getPwDoms();
+                this._inputsList.push(inputs);
+                this._bindEvents(inputs);
+            }
+        },
+
+        _getPwDoms: function(){
+            var inputs;
+            if(document.querySelectorAll){
+                inputs = document.querySelectorAll('input[type=password]');
+            }else{
+                var temp = document.getElementsByTagName("input");
+                inputs = [];
+                for(var i=0, L=temp.length; i<L; i++){
+                    if(temp[i].getAttribute("type")=='password'){
+                        inputs.push(temp[i]);
+                    }
+                }
+            }
+
+            return inputs
+        },
+
+        _bindEvents: function(inputs){
+            var self = this;
+
+            if(inputs.length < 1){
+                return;
+            }
+
+            for(var i=0,el,L=inputs.length; i<L; i++){
+                el = inputs[i];
+
+                (function(el){
+                    $.on(el, 'keyup', function(){
+                        self.updateStrength(el);
+                    })
+                    $.on(el, 'focus', function(){
+                        self.showStrength(el);
+                    })
+                    $.on(el, 'blur', function(){
+                        self.hideStrength();
+                    });
+                })(el);
+            }
+        },
+
+        _getStrLength: function(str){
+            return (utils.getCharLength(str) + 3)*6;
+        },
+
+        _createStrengthNotifier: function(){
+            this.notifier = document.createElement('div');
+            this.notifierTag = document.createElement('div');
+
+            $.css(this.notifier,{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                width: 0,
+                height: 0,
+                'font-size': '14px',
+                'text-align': 'center',
+                color: '#ffffff',
+                'z-index': this.options.zIndex,
+                display: 'none'
+            });
+
+            $.css(this.notifierTag,{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                // width: (this.options.tagText.length+1)*12 + 'px',
+                width: this._getStrLength(this.options.tagText) + 'px',
+                height: 0,
+                'font-size': '12px',
+                'text-align': 'center',
+                color: '#666666',
+                background:'#e0e0e0',
+                'z-index': this.options.zIndex + 2,
+                opacity: 0.7,
+                display: 'none'
+            });
+            this.notifierTag.innerHTML = this.options.tagText;
+
+            BODY.appendChild(this.notifier);
+            BODY.appendChild(this.notifierTag);
+        },
+
+        addInputs: function(inputs){
+            if(!inputs){return}
+
+            if(!inputs.length){inputs = [inputs];}
+
+            this._inputsList.push(inputs);
+            this._bindEvents(inputs);
+        },
+
+        updateStrength: function(el){
+            var val = el.value,
+                size = {width: el.offsetWidth, height: el.offsetHeight},
+                pos = el.getBoundingClientRect(),
+                strength = this.checkStrength(val, this.options.checkLength),
+                notifierWidth = this._getStrLength(this.options.strengthTexts[strength.strength]);
+
+            $.css(this.notifier, {
+                background: this.options.background[strength.text],
+                display: val.length?'block':'none',
+                width: notifierWidth-2 + 'px',
+                left: pos.left + size.width - notifierWidth + 'px'
+            });
+
+            this.notifier.innerHTML = this.options.strengthTexts[strength.strength];
+
+            $.css(this.notifierTag, {
+                display: val.length?'block':'none',
+                left: pos.left + size.width - notifierWidth - this._getStrLength(this.options.tagText)+ 'px'
+            });
+        },
+
+        showStrength: function(el){
+            var val = el.value,
+                size = {width: el.offsetWidth, height: el.offsetHeight},
+                pos = el.getBoundingClientRect(),
+                strength = this.checkStrength(val),
+                notifierWidth = this._getStrLength(this.options.strengthTexts[strength.strength]);
+
+            $.css(this.notifier, {
+                left: pos.left + size.width - notifierWidth + 'px',
+                top: pos.top + 2 + 'px',
+                width: notifierWidth-2 + 'px',
+                height: size.height-4 + 'px',
+                'line-height': size.height-4 +'px',
+                background: this.options.background[strength.text],
+                display: val.length?'block':'none'
+            });
+            this.notifier.innerHTML = this.options.strengthTexts[strength.strength];
+
+            $.css(this.notifierTag, {
+                left: pos.left + size.width - notifierWidth - this._getStrLength(this.options.tagText)+ 'px',
+                top: pos.top + 2 + 'px',
+                height: size.height-4 + 'px',
+                'line-height': size.height-4 + 'px',
+                display: val.length?'block':'none'
+            });
+        },
+
+        hideStrength: function(){
+            $.css(this.notifier, {
+                display:'none'
+            });
+
+            $.css(this.notifierTag, {
+                display:'none'
+            });
+        },
+
+        verify: function(inputs){
+            var result = true,
+                list = inputs || this._inputsList,
+                self = this;
+
+            if(list.length){
+                for(var i=0,L=list.length; i<L; i++){
+                    if(!result){
+                        break;
+                    }
+                    result = self._traverseInputs(list[i]);
+                }
+            }else{
+                result = this._traverseInputs(list);
+            }
+
+            return result;
+        },
+
+        _traverseInputs: function(inputs){
+            var self = this,
+                result = true;
+            if(!inputs){
+                return result;
+            }else if(!inputs.length){
+                if(!result){
+                    return;
+                }
+                var el = inputs,
+                    val = el.value,
+                    strength = self.checkStrength(val, self.options.checkLength);
+
+                if(strength.strength < 3){
+                    self.showStrength(el);
+                    result = false;
+                }
+            }else{
+                for(var i=0,L=inputs.length; i<L; i++){
+                    if(!result){
+                        break;
+                    }
+                    var el = inputs[i],
+                        val = el.value,
+                        strength = self.checkStrength(val, self.options.checkLength);
+
+                    if(strength.strength < 3){
+                        self.showStrength(el);
+                        result = false;
+                    }
+                } 
+            }
+
+            return result
+        },
+
+        checkStrength: function(password, minLength){
+            if(typeof password !== "number" && typeof password !== "string"){
+                password = '';
+            }else{
+                password = String(password);
+            }
+            minLength = minLength || 6;
+
+            /**
+             * strength
+             * 1: too short
+             * 2: pure string
+             * 3: normal
+             * 4: strong
+             * 5: stronger
+             */
+            var strength = 1,
+                numberPattern = /\d+/,
+                stringLowPattern = /[a-z]+/,
+                stringUpPattern = /[A-Z]+/,
+                otherStrPattern = /\W+/,
+                strengthText = 'weaker,weak,normal,strong,stronger';
+
+            if(password.length >= minLength){
+                if(numberPattern.test(password)){
+                    strength += 1;
+                }
+
+                if(stringLowPattern.test(password)){
+                    strength += 1;
+                }
+
+                if(stringUpPattern.test(password)){
+                    strength += 1;
+                }
+
+                if(otherStrPattern.test(password)){
+                    strength += 1;
+                }
+
+                if(password.length > minLength*2){
+                    strength += Math.floor(password.length/minLength) - 2
+                }
+
+                if(strength>5){
+                    strength = 5;
+                }
+            }
+
+            return {
+                strength: strength,
+                text: strengthText.split(',')[strength-1]
+            };
+        }
+    }
+
+    return Password;
+}));

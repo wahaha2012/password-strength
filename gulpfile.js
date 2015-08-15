@@ -66,8 +66,12 @@ gulp.task('less', function(){
 gulp.task("bundle", ["less"], function(){
     var temp = '',
         output = './bundle.js';
-    readFile('./src/utils.js').then(function(fileStr){
+    readFile('./src/lib.js').then(function(fileStr){
         temp = fileStr;
+
+        return readFile('./src/utils.js');
+    }).then(function(fileStr){
+        temp = fileStr.replace('//{{{lib}}}', temp);
 
         return readFile('./src/password-strength.js');
     }).then(function(fileStr){
@@ -79,7 +83,7 @@ gulp.task("bundle", ["less"], function(){
 
         return writeFile(output, temp);
     }).then(function(){
-        jsUglify();
+        // jsUglify();
         console.log(output + ' updated!');
     });
 });

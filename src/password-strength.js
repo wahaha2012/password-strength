@@ -11,15 +11,15 @@ function(){
                 'stronger': '#58a80a'
             },
             checkLength: 6,
-            strengthTexts:'空差弱中好强',
+            strengthTexts:['空','差','弱','中','好','强'],
             tagText: '密码强度',
             autoFindInputs: true,
             zIndex: 10000
         };
 
     function Password(options){
-        this.options = utils.extend({}, defaultOptions);
-        this.options = utils.extend(this.options, options||{});
+        this.options = $.extend({}, defaultOptions);
+        this.options = $.extend(this.options, options||{});
 
         this._init();
     }
@@ -66,24 +66,28 @@ function(){
                 el = inputs[i];
 
                 (function(el){
-                    utils.on(el, 'keyup', function(){
+                    $.on(el, 'keyup', function(){
                         self.updateStrength(el);
                     })
-                    utils.on(el, 'focus', function(){
+                    $.on(el, 'focus', function(){
                         self.showStrength(el);
                     })
-                    utils.on(el, 'blur', function(){
+                    $.on(el, 'blur', function(){
                         self.hideStrength();
                     });
                 })(el);
             }
         },
 
+        _getStrLength: function(str){
+            return (utils.getCharLength(str) + 2)*6;
+        },
+
         _createStrengthNotifier: function(){
             this.notifier = document.createElement('div');
             this.notifierTag = document.createElement('div');
 
-            utils.css(this.notifier,{
+            $.css(this.notifier,{
                 position: 'absolute',
                 left: 0,
                 top: 0,
@@ -96,11 +100,12 @@ function(){
                 display: 'none'
             });
 
-            utils.css(this.notifierTag,{
+            $.css(this.notifierTag,{
                 position: 'absolute',
                 left: 0,
                 top: 0,
-                width: (this.options.tagText.length+1)*12 + 'px',
+                // width: (this.options.tagText.length+1)*12 + 'px',
+                width: this._getStrLength(this.options.tagText) + 'px',
                 height: 0,
                 'font-size': '12px',
                 'text-align': 'center',
@@ -129,14 +134,14 @@ function(){
             var val = el.value,
                 strength = this.checkStrength(val, this.options.checkLength);
 
-            utils.css(this.notifier, {
+            $.css(this.notifier, {
                 background: this.options.bgColors[strength.text],
                 display: val.length?'block':'none'
             });
 
-            this.notifier.innerHTML = this.options.strengthTexts.substr(strength.strength,1);
+            this.notifier.innerHTML = this.options.strengthTexts[strength.strength];
 
-            utils.css(this.notifierTag, {
+            $.css(this.notifierTag, {
                 display: val.length?'block':'none'
             });
         },
@@ -147,7 +152,7 @@ function(){
                 pos = el.getBoundingClientRect(),
                 strength = this.checkStrength(val);
 
-            utils.css(this.notifier, {
+            $.css(this.notifier, {
                 left: pos.left + size.width - size.height + 'px',
                 top: pos.top + 2 + 'px',
                 width: size.height-2 + 'px',
@@ -156,10 +161,10 @@ function(){
                 background: this.options.bgColors[strength.text],
                 display: val.length?'block':'none'
             });
-            this.notifier.innerHTML = this.options.strengthTexts.substr(strength.strength,1);
+            this.notifier.innerHTML = this.options.strengthTexts[strength.strength];
 
-            utils.css(this.notifierTag, {
-                left: pos.left + size.width - size.height - (this.options.tagText.length+1)*12 + 'px',
+            $.css(this.notifierTag, {
+                left: pos.left + size.width - size.height - this._getStrLength(this.options.tagText)+ 'px',
                 top: pos.top + 2 + 'px',
                 height: size.height-4 + 'px',
                 'line-height': size.height-4 + 'px',
@@ -168,11 +173,11 @@ function(){
         },
 
         hideStrength: function(){
-            utils.css(this.notifier, {
+            $.css(this.notifier, {
                 display:'none'
             });
 
-            utils.css(this.notifierTag, {
+            $.css(this.notifierTag, {
                 display:'none'
             });
         },
@@ -245,7 +250,7 @@ function(){
              * 4: strong
              * 5: stronger
              */
-            var strength = Math.ceil(password.length/minLength),
+            var strength = 1,
                 numberPattern = /\d+/,
                 stringLowPattern = /[a-z]+/,
                 stringUpPattern = /[A-Z]+/,
@@ -268,10 +273,14 @@ function(){
                 if(otherStrPattern.test(password)){
                     strength += 1;
                 }
-            }
 
-            if(strength>5){
-                strength = 5;
+                if(password.length > minLength*2){
+                    strength += Math.floor(password.length/minLength) - 2
+                }
+
+                if(strength>5){
+                    strength = 5;
+                }
             }
 
             return {

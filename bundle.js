@@ -164,7 +164,7 @@
     
     var BODY = document.body,
         defaultOptions = {
-            bgColors: {
+            background: {
                 'weaker': '#f22a26',
                 'weak': '#ff880a',
                 'normal': '#b2a30a',
@@ -179,8 +179,8 @@
         };
 
     function Password(options){
-        this.options = utils.extend({}, defaultOptions);
-        this.options = utils.extend(this.options, options||{});
+        this.options = $.extend({}, defaultOptions);
+        this.options = $.extend(this.options, options||{});
 
         this._init();
     }
@@ -227,24 +227,28 @@
                 el = inputs[i];
 
                 (function(el){
-                    utils.on(el, 'keyup', function(){
+                    $.on(el, 'keyup', function(){
                         self.updateStrength(el);
                     })
-                    utils.on(el, 'focus', function(){
+                    $.on(el, 'focus', function(){
                         self.showStrength(el);
                     })
-                    utils.on(el, 'blur', function(){
+                    $.on(el, 'blur', function(){
                         self.hideStrength();
                     });
                 })(el);
             }
         },
 
+        _getStrLength: function(str){
+            return (utils.getCharLength(str) + 3)*6;
+        },
+
         _createStrengthNotifier: function(){
             this.notifier = document.createElement('div');
             this.notifierTag = document.createElement('div');
 
-            utils.css(this.notifier,{
+            $.css(this.notifier,{
                 position: 'absolute',
                 left: 0,
                 top: 0,
@@ -257,11 +261,12 @@
                 display: 'none'
             });
 
-            utils.css(this.notifierTag,{
+            $.css(this.notifierTag,{
                 position: 'absolute',
                 left: 0,
                 top: 0,
-                width: (this.options.tagText.length+1)*12 + 'px',
+                // width: (this.options.tagText.length+1)*12 + 'px',
+                width: this._getStrLength(this.options.tagText) + 'px',
                 height: 0,
                 'font-size': '12px',
                 'text-align': 'center',
@@ -288,17 +293,23 @@
 
         updateStrength: function(el){
             var val = el.value,
-                strength = this.checkStrength(val, this.options.checkLength);
+                size = {width: el.offsetWidth, height: el.offsetHeight},
+                pos = el.getBoundingClientRect(),
+                strength = this.checkStrength(val, this.options.checkLength),
+                notifierWidth = this._getStrLength(this.options.strengthTexts[strength.strength]);
 
-            utils.css(this.notifier, {
-                background: this.options.bgColors[strength.text],
-                display: val.length?'block':'none'
+            $.css(this.notifier, {
+                background: this.options.background[strength.text],
+                display: val.length?'block':'none',
+                width: notifierWidth-2 + 'px',
+                left: pos.left + size.width - notifierWidth + 'px',
             });
 
             this.notifier.innerHTML = this.options.strengthTexts[strength.strength];
 
-            utils.css(this.notifierTag, {
-                display: val.length?'block':'none'
+            $.css(this.notifierTag, {
+                display: val.length?'block':'none',
+                left: pos.left + size.width - notifierWidth - this._getStrLength(this.options.tagText)+ 'px',
             });
         },
 
@@ -306,21 +317,22 @@
             var val = el.value,
                 size = {width: el.offsetWidth, height: el.offsetHeight},
                 pos = el.getBoundingClientRect(),
-                strength = this.checkStrength(val);
+                strength = this.checkStrength(val),
+                notifierWidth = this._getStrLength(this.options.strengthTexts[strength.strength]);
 
-            utils.css(this.notifier, {
-                left: pos.left + size.width - size.height + 'px',
+            $.css(this.notifier, {
+                left: pos.left + size.width - notifierWidth + 'px',
                 top: pos.top + 2 + 'px',
-                width: size.height-2 + 'px',
+                width: notifierWidth-2 + 'px',
                 height: size.height-4 + 'px',
                 'line-height': size.height-4 +'px',
-                background: this.options.bgColors[strength.text],
+                background: this.options.background[strength.text],
                 display: val.length?'block':'none'
             });
             this.notifier.innerHTML = this.options.strengthTexts[strength.strength];
 
-            utils.css(this.notifierTag, {
-                left: pos.left + size.width - size.height - (this.options.tagText.length+1)*12 + 'px',
+            $.css(this.notifierTag, {
+                left: pos.left + size.width - notifierWidth - this._getStrLength(this.options.tagText)+ 'px',
                 top: pos.top + 2 + 'px',
                 height: size.height-4 + 'px',
                 'line-height': size.height-4 + 'px',
@@ -329,16 +341,16 @@
         },
 
         hideStrength: function(){
-            utils.css(this.notifier, {
+            $.css(this.notifier, {
                 display:'none'
             });
 
-            utils.css(this.notifierTag, {
+            $.css(this.notifierTag, {
                 display:'none'
             });
         },
 
-        valid: function(inputs){
+        verify: function(inputs){
             var result = true,
                 list = inputs || this._inputsList,
                 self = this;
@@ -346,7 +358,7 @@
             if(list.length){
                 for(var i=0,L=list.length; i<L; i++){
                     if(!result){
-                        return
+                        break;
                     }
                     result = self._traverseInputs(list[i]);
                 }
@@ -376,6 +388,9 @@
                 }
             }else{
                 for(var i=0,L=inputs.length; i<L; i++){
+                    if(!result){
+                        break;
+                    }
                     var el = inputs[i],
                         val = el.value,
                         strength = self.checkStrength(val, self.options.checkLength);
@@ -389,7 +404,7 @@
 
             return result
         },
-
+        
         checkStrength: function(password, minLength){
             if(typeof password !== "number" && typeof password !== "string"){
                 password = '';

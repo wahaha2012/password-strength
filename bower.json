@@ -1,6 +1,6 @@
 {
   "name": "password-strength",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "homepage": "https://github.com/wahaha2012/password-strength",
   "authors": [
     "wxwdesign <wxwdesign@gmail.com>"
@@ -30,6 +30,6 @@
     "index.html",
     "package.json"
   ],
-  "dependencies": 
+  "dependencies": {
   }
 }

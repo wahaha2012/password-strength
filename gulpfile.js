@@ -83,7 +83,7 @@ gulp.task("bundle", ["less"], function(){
 
         return writeFile(output, temp);
     }).then(function(){
-        // jsUglify();
+        jsUglify();
         console.log(output + ' updated!');
     });
 });

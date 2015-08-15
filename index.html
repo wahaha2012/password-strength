@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Password-strength by wahaha2012</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Password-strength</h1>
+      <h2 class="project-tagline">password strength checker</h2>
+      <a href="https://github.com/wahaha2012/password-strength" class="btn">View on GitHub</a>
+      <a href="https://github.com/wahaha2012/password-strength/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/wahaha2012/password-strength/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="password-strength" class="anchor" href="#password-strength" aria-hidden="true"><span class="octicon octicon-link"></span></a>password-strength</h1>
+
+<p>password strength checker</p>
+
+<h1>
+<a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install</h1>
+
+<blockquote>
+<p>use bower</p>
+</blockquote>
+
+<div class="highlight highlight-bash"><pre>bower install password-strength --save</pre></div>
+
+<blockquote>
+<p><a href="https://raw.githubusercontent.com/wahaha2012/password-strength/master/bundle.js">Download source</a></p>
+</blockquote>
+
+<h1>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h1>
+
+<blockquote>
+<p>global</p>
+</blockquote>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>./bundle.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
+
+<blockquote>
+<p>amd or cmd</p>
+</blockquote>
+
+<div class="highlight highlight-js"><pre><span class="pl-k">var</span> PasswordStrength <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>password-strength/bundle<span class="pl-pds">'</span></span>);</pre></div>
+
+<h1>
+<a id="demo" class="anchor" href="#demo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Demo</h1>
+
+<blockquote>
+<p>minimum config, auto find password field</p>
+</blockquote>
+
+<div class="highlight highlight-js"><pre><span class="pl-k">new</span> <span class="pl-en">PasswordStrength</span>();</pre></div>
+
+<blockquote>
+<p>add password field manually</p>
+</blockquote>
+
+<div class="highlight highlight-js"><pre><span class="pl-k">var</span> Demo <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">PasswordStrength</span>({
+    autoFindInputs<span class="pl-k">:</span> <span class="pl-c1">false</span>
+});
+<span class="pl-k">var</span> inputs <span class="pl-k">=</span> <span class="pl-c1">document</span>.<span class="pl-c1">querySelectorAll</span>(<span class="pl-s"><span class="pl-pds">'</span>input[type=password]<span class="pl-pds">'</span></span>);
+
+Demo.<span class="pl-c1">addInputs</span>(inputs[<span class="pl-c1">0</span>]);</pre></div>
+
+<blockquote>
+<p>custom strength tag text and strength result info</p>
+</blockquote>
+
+<div class="highlight highlight-js"><pre><span class="pl-k">var</span> Demo <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">PasswordStrength</span>({
+    autoFindInputs<span class="pl-k">:</span> <span class="pl-c1">false</span>,
+    tagText<span class="pl-k">:</span><span class="pl-s"><span class="pl-pds">'</span>Strength<span class="pl-pds">'</span></span>,
+    strengthTexts<span class="pl-k">:</span>[<span class="pl-s"><span class="pl-pds">'</span>Empty<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>Bad<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>Weak<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>Middle<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>Good<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>Strong<span class="pl-pds">'</span></span>]
+});
+<span class="pl-k">var</span> inputs <span class="pl-k">=</span> <span class="pl-c1">document</span>.<span class="pl-c1">querySelectorAll</span>(<span class="pl-s"><span class="pl-pds">'</span>input[type=password]<span class="pl-pds">'</span></span>);
+
+Demo.<span class="pl-c1">addInputs</span>(inputs[<span class="pl-c1">0</span>]);</pre></div>
+
+<h1>
+<a id="api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>API</h1>
+
+<div class="highlight highlight-js"><pre><span class="pl-k">new</span> <span class="pl-en">PasswordStrength</span>(config) 
+config <span class="pl-k">:</span> {
+    <span class="pl-c">/*base config and default values*/</span>
+    <span class="pl-c">//strength info background</span>
+    background<span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">'</span>weaker<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>#f22a26<span class="pl-pds">'</span></span>,
+        <span class="pl-s"><span class="pl-pds">'</span>weak<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>#ff880a<span class="pl-pds">'</span></span>,
+        <span class="pl-s"><span class="pl-pds">'</span>normal<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>#b2a30a<span class="pl-pds">'</span></span>,
+        <span class="pl-s"><span class="pl-pds">'</span>strong<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>#99b20a<span class="pl-pds">'</span></span>,
+        <span class="pl-s"><span class="pl-pds">'</span>stronger<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>#58a80a<span class="pl-pds">'</span></span>
+    },
+    checkLength<span class="pl-k">:</span> <span class="pl-c1">6</span>, <span class="pl-c">//password minimum length required</span>
+    strengthTexts<span class="pl-k">:</span>[<span class="pl-s"><span class="pl-pds">'</span>空<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>差<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>弱<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>中<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>好<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>强<span class="pl-pds">'</span></span>], <span class="pl-c">//strength grade info</span>
+    tagText<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>密码强度<span class="pl-pds">'</span></span>, <span class="pl-c">//strength tag text</span>
+    autoFindInputs<span class="pl-k">:</span> <span class="pl-c1">true</span>, <span class="pl-c">//auto find all password inputs</span>
+    zIndex<span class="pl-k">:</span> <span class="pl-c1">10000</span> <span class="pl-c">//set css z-index for strength tips</span>
+}
+
+<span class="pl-c">/* methods */</span>
+<span class="pl-c">/**</span>
+<span class="pl-c"> * add password input fields</span>
+<span class="pl-c"> * <span class="pl-k">@param</span>  {DomElement} inputs  password input dom elements</span>
+<span class="pl-c"> * <span class="pl-k">@return</span> {Null}           void</span>
+<span class="pl-c"> */</span>
+.<span class="pl-c1">addInputs</span>(inputs);
+
+<span class="pl-c">/**</span>
+<span class="pl-c"> * update field strength status</span>
+<span class="pl-c"> * <span class="pl-k">@param</span>  {DomElement} domElement  password input dom element</span>
+<span class="pl-c"> * <span class="pl-k">@return</span> {Null}           void</span>
+<span class="pl-c"> */</span>
+.<span class="pl-c1">updateStrength</span>(domElement);
+
+<span class="pl-c">/**</span>
+<span class="pl-c"> * show field strength status</span>
+<span class="pl-c"> * <span class="pl-k">@param</span>  {DomElement} domElement  password input dom element</span>
+<span class="pl-c"> * <span class="pl-k">@return</span> {Null}           void</span>
+<span class="pl-c"> */</span>
+.<span class="pl-c1">showStrength</span>(domElement);
+
+<span class="pl-c">/**</span>
+<span class="pl-c"> * hidden field strength status</span>
+<span class="pl-c"> * <span class="pl-k">@return</span> {Null}           void</span>
+<span class="pl-c"> */</span>
+.<span class="pl-c1">hideStrength</span>();
+
+<span class="pl-c">/**</span>
+<span class="pl-c"> * check field strength</span>
+<span class="pl-c"> * <span class="pl-k">@param</span>  {DomElement}[optional] domElements  password input dom elements, if not provide, check all inputs added to instance.</span>
+<span class="pl-c"> * <span class="pl-k">@return</span> {Boolean}           verify pass or not</span>
+<span class="pl-c"> */</span>
+.<span class="pl-c1">verify</span>([domElements]);
+
+<span class="pl-c">/**</span>
+<span class="pl-c"> * check password strength</span>
+<span class="pl-c"> * <span class="pl-k">@param</span>  {String} password  string password need check</span>
+<span class="pl-c"> * <span class="pl-k">@param</span>  {Integer} minLength  minimum password length required</span>
+<span class="pl-c"> * <span class="pl-k">@return</span> {Object}  {strength: Integer[1-5], text: String['weak'...]}</span>
+<span class="pl-c"> */</span>
+.<span class="pl-c1">checkStrength</span>(password, minLength);</pre></div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/wahaha2012/password-strength">Password-strength</a> is maintained by <a href="https://github.com/wahaha2012">wahaha2012</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>

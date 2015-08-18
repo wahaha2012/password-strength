@@ -11,6 +11,7 @@ function(){
                 'stronger': '#58a80a'
             },
             checkLength: 6,
+            miniStrength: 3,
             strengthTexts:['空','差','弱','中','好','强'],
             tagText: '密码强度',
             autoFindInputs: true,
@@ -221,7 +222,7 @@ function(){
                     val = el.value,
                     strength = self.checkStrength(val, self.options.checkLength);
 
-                if(strength.strength < 3){
+                if(strength.strength < self.options.miniStrength){
                     self.showStrength(el);
                     result = false;
                 }

@@ -70,6 +70,7 @@ config : {
         'stronger': '#58a80a'
     },
     checkLength: 6, //password minimum length required
+    miniStrength: 3, //minimum password strength required
     strengthTexts:['空','差','弱','中','好','强'], //strength grade info
     tagText: '密码强度', //strength tag text
     autoFindInputs: true, //auto find all password inputs

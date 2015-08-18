@@ -56,11 +56,11 @@ function readFile(filePath){
 }
 
 gulp.task('less', function(){
-    return gulp.src('demo/less/*.less')
+    return gulp.src('example/less/*.less')
             .pipe(less())
             .pipe(cssmin())
             .on('error', logErr)
-            .pipe(gulp.dest('demo/css/'));
+            .pipe(gulp.dest('example/css/'));
 });
 
 gulp.task("bundle", ["less"], function(){
@@ -89,7 +89,7 @@ gulp.task("bundle", ["less"], function(){
 });
 
 gulp.task('watch', function(){
-    gulp.watch(['demo/less/*.less'], ['less']);
+    gulp.watch(['example/less/*.less'], ['less']);
 });
 
 gulp.task('default', ['bundle']);
